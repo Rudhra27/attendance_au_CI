@@ -15,7 +15,7 @@ public class CourseOutcomeMap {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@JsonBackReference
+	@JsonBackReference //@JsonBackReference is the back part of reference; it'll be omitted from serialization.
 	 @OneToOne
 	    @JoinColumn(name = "id")
 	 @MapsId

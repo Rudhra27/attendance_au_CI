@@ -70,8 +70,9 @@ public class MetaCourse{
 	@UpdateTimestamp
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime updatedAt;
-	//@JsonIgnore
-	@JsonManagedReference
+
+	//com.fasterxml.jackson.databind.JsonMappingException: Infinite recursion (StackOverflowError)
+	@JsonManagedReference //@JsonManagedReference is the forward part of reference, the one that gets serialized normally.
 	 @OneToOne(mappedBy = "metaCourse", cascade = CascadeType.ALL)
 	 @PrimaryKeyJoinColumn
 	 private CourseOutcomeMap course_outcome_map;

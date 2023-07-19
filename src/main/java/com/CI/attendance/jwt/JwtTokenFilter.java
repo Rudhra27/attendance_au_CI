@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -21,6 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import io.jsonwebtoken.Claims;
 import com.CI.attendance.Model.Role;
 import com.CI.attendance.Model.User;
+import com.CI.attendance.Repository.UserRepository;
 import com.CI.attendance.Service.UserDetailsImpl;
 import com.CI.attendance.Service.UserDetailsServiceImpl;
 
@@ -34,6 +36,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 	
 	 @Autowired
 	  private UserDetailsServiceImpl userDetailsService;
+	
+	 @Autowired private UserRepository userRepository;
 	 
 	 @Value("${app.jwt.secret}")
 		private String SECRET_KEY;
@@ -117,6 +121,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 	                    .getSubject();
 		  }
 
+		  public User getUser()
+		  {
+			  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+				UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+				int id =userPrincipal.getId();
+				 User user =userRepository.findById(id).orElse(null);
+				 return user;
+		  }
 			/*
 			 * private UserDetails getUserDetail(String token) { User userDetails = new
 			 * User(); Claims claims = jwtUtil.parseClaims(token); String subject = (String)

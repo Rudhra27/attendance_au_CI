@@ -22,6 +22,7 @@ import com.CI.attendance.Model.User;
 import com.CI.attendance.Repository.RoleRepository;
 import com.CI.attendance.Repository.UserRepository;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 
 @Service
@@ -34,6 +35,9 @@ public class ExcelReader {
 	  RandomPasswordGenerator passayGenerator;
 	 @Autowired
 	  PasswordEncoder encoder;
+	 
+	 @Autowired
+	 EmailService Eservice;
 	
 	  
 	public static  String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -87,6 +91,12 @@ public class ExcelReader {
 					    System.out.println("Password " +Password);
 						user.setPassword(encoder.encode(Password));
 						userRepository.save(user);
+						try {
+							Eservice.sendmail(user.getEmail(), Password);
+						} catch (MessagingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 			  }
             
             workbook.close();

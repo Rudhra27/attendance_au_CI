@@ -20,7 +20,7 @@ import com.CI.attendance.Repository.*;
 public class CourseService {
 
 	@Autowired
-	CoursePepository courseRepository;
+	CourseRepository courseRepository;
 	
 	@Autowired
 	CourseOutcomeMapRepository comapRepository;

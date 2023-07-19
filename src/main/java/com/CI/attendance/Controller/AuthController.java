@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ import com.CI.attendance.Response.*;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthApi {
+public class AuthController {
 	@Autowired AuthenticationManager authManager;
 	@Autowired JwtTokenUtil jwtUtil;
 	
@@ -54,6 +55,9 @@ public class AuthApi {
 	
 	 @Autowired
 	  RandomPasswordGenerator passayGenerator;
+	 
+	 @Autowired
+	 EmailService Eservice;
 	
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
@@ -116,6 +120,12 @@ public class AuthApi {
 	   System.out.println("Password " +Password);
 	   user.setPassword(Password);
 		User createdUser =  service.save(user);
+		try {
+			Eservice.sendmail(createdUser.getEmail(), Password);
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		URI uri = URI.create("/users/" + createdUser.getId());
 		
 		UserDTO userDto = new UserDTO(createdUser.getId(), createdUser.getUsername(),createdUser.getEmail(),
