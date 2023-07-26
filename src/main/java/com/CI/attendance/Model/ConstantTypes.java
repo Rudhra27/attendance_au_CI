@@ -10,4 +10,8 @@ public class ConstantTypes {
 		  PCC_TCL 
 		}
 
+	public enum TYPE_OF_LECTURE{
+		Lecture,
+		Tutorial
+	}
 }

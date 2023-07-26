@@ -68,7 +68,7 @@ public class CourseService {
 		Optional<MetaRegulation> reg = regulationRepo.findById(course.getRegulation().getId());
 		updateCourse.setRegulation(reg.orElseThrow(null));
 		
-		CourseOutcomeMap map = comapRepository.findById(id);
+		CourseOutcomeMap map = updateCourse.getCourse_outcome_map();
 		map.setCourseOutcomeIds(course.getCourse_outcome_map().getCourseOutcomeIds());
 		map.setProgrammeOutcomeIds(course.getCourse_outcome_map().getProgrammeOutcomeIds());
 		comapRepository.save(map);
